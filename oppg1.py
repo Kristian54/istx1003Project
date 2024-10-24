@@ -58,76 +58,82 @@ varemerke_data, ikke_varemerke_data, diverse_data = groupByTheme(clean_data)
 #print("Ikke-varemerkedata:\n", ikke_varemerke_data)
 #print("Diverse:\n", diverse_data)
 
+############################################
+
+# Viser kryssplott for varemerke, ikke-varemerke og diverse data
 # plt.scatter(varemerke_data['Pieces'], varemerke_data['Price'])
 # plt.title("Varemerke")
 # plt.xlabel('Antall brikker')
 # plt.ylabel('Pris i dollar [$]')
 # plt.gca().set_aspect(5)
-# #plt.show()
+# plt.show()
 #
 # plt.scatter(ikke_varemerke_data['Pieces'], ikke_varemerke_data['Price'])
 # plt.title("Ikke-varemerke")
 # plt.xlabel('Antall brikker')
 # plt.ylabel('Pris i dollar [$]')
 # plt.gca().set_aspect(5)
-# #plt.show()
+# plt.show()
 #
 # plt.scatter(diverse_data['Pieces'], diverse_data['Price'])
 # plt.title("Diverse")
 # plt.xlabel('Antall brikker')
 # plt.ylabel('Pris i dollar [$]')
-# #plt.show()
+# plt.show()
 
 ############################################
 
-# formel = 'Price ~ Pieces'
-#
-# modell = smf.ols(formel, data = varemerke_data)
-# resultat = modell.fit()
-# print("Varemerkedata:\n", resultat.summary())
-#
-# slope = resultat.params['Pieces']
-# intercept = resultat.params['Intercept']
-#
-# regression_x = np.array(varemerke_data['Pieces'])
-#
-# regression_y = slope * regression_x + intercept
-#
-# plt.scatter(varemerke_data['Pieces'], varemerke_data['Price'], label='Data Points')
-# plt.plot(regression_x, regression_y, color='red', label='Regression Line')
-# plt.xlabel('Antall brikker')
-# plt.ylabel('Pris [$]')
-# plt.title('Varemerkedata - Kryssplott med regresjonslinje (enkel LR)')
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-#
-# modell = smf.ols(formel, data = ikke_varemerke_data)
-# resultat = modell.fit()
-# print("Ikke-varemerkedata\n", resultat.summary())
-# regression_x = np.array(ikke_varemerke_data['Pieces'])
-# plt.scatter(ikke_varemerke_data['Pieces'], ikke_varemerke_data['Price'], label='Data Points')
-# plt.plot(regression_x, slope * regression_x + intercept, color='red', label='Regression Line')
-# plt.xlabel('Antall brikker')
-# plt.ylabel('Pris [$]')
-# plt.title('Ikke-varemerkedata - Kryssplott med regresjonslinje (enkel LR)')
-# plt.legend()
-# plt.grid()
-# plt.show()
-#
-# modell = smf.ols(formel, data = diverse_data)
-# print("Diverse-data:\n", resultat.summary())
-# resultat.summary()
-# regression_x = np.array(diverse_data['Pieces'])
-# plt.scatter(diverse_data['Pieces'], diverse_data['Price'], label='Data Points')
-# plt.plot(regression_x, slope * regression_x + intercept, color='red', label='Regression Line')
-# plt.xlabel('Antall brikker')
-# plt.ylabel('Pris [$]')
-# plt.title('Diverse data - Kryssplott med regresjonslinje (enkel LR)')
-# plt.legend()
-# plt.grid()
-# plt.show()
+# Viser kryssplott med regresjonslinje for varemerke, ikke-varemerke og diverse data.
+# Printer også OLS-resultatet for hver av modellene.
+
+formel = 'Price ~ Pieces'
+
+modell = smf.ols(formel, data = varemerke_data)
+resultat = modell.fit()
+print("Varemerkedata:\n", resultat.summary())
+
+slope = resultat.params['Pieces']
+intercept = resultat.params['Intercept']
+
+regression_x = np.array(varemerke_data['Pieces'])
+
+regression_y = slope * regression_x + intercept
+
+plt.scatter(varemerke_data['Pieces'], varemerke_data['Price'], label='Data Points')
+plt.plot(regression_x, regression_y, color='red', label='Regression Line')
+plt.xlabel('Antall brikker')
+plt.ylabel('Pris [$]')
+plt.title('Varemerkedata - Kryssplott med regresjonslinje (enkel LR)')
+plt.legend()
+plt.grid()
+plt.show()
+
+
+modell = smf.ols(formel, data = ikke_varemerke_data)
+resultat = modell.fit()
+print("Ikke-varemerkedata\n", resultat.summary())
+regression_x = np.array(ikke_varemerke_data['Pieces'])
+plt.scatter(ikke_varemerke_data['Pieces'], ikke_varemerke_data['Price'], label='Data Points')
+plt.plot(regression_x, slope * regression_x + intercept, color='red', label='Regression Line')
+plt.xlabel('Antall brikker')
+plt.ylabel('Pris [$]')
+plt.title('Ikke-varemerkedata - Kryssplott med regresjonslinje (enkel LR)')
+plt.legend()
+plt.grid()
+plt.show()
+
+modell = smf.ols(formel, data = diverse_data)
+print("Diverse-data:\n", resultat.summary())
+resultat.summary()
+regression_x = np.array(diverse_data['Pieces'])
+plt.scatter(diverse_data['Pieces'], diverse_data['Price'], label='Data Points')
+plt.plot(regression_x, slope * regression_x + intercept, color='red', label='Regression Line')
+plt.xlabel('Antall brikker')
+plt.ylabel('Pris [$]')
+plt.title('Diverse data - Kryssplott med regresjonslinje (enkel LR)')
+plt.legend()
+plt.grid()
+plt.show()
 
 ############################################
 
@@ -151,4 +157,4 @@ plt.ylabel('Pris')
 plt.title('Kryssplott med regresjonslinjer')
 plt.legend()
 plt.grid()
-plt.show()
+#plt.show()
