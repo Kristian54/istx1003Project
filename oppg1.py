@@ -60,7 +60,8 @@ varemerke_data, ikke_varemerke_data, diverse_data = groupByTheme(clean_data)
 
 ############################################
 
-# Viser kryssplott for varemerke, ikke-varemerke og diverse data
+# Viser kryssplott for varemerke, ikke-varemerke og diverse data. Har ikke regresjonslinje.
+
 # plt.scatter(varemerke_data['Pieces'], varemerke_data['Price'])
 # plt.title("Varemerke")
 # plt.xlabel('Antall brikker')
@@ -123,6 +124,7 @@ plt.grid()
 plt.show()
 
 modell = smf.ols(formel, data = diverse_data)
+resultat = modell.fit()
 print("Diverse-data:\n", resultat.summary())
 resultat.summary()
 regression_x = np.array(diverse_data['Pieces'])
@@ -157,4 +159,23 @@ plt.ylabel('Pris')
 plt.title('Kryssplott med regresjonslinjer')
 plt.legend()
 plt.grid()
-#plt.show()
+plt.show()
+
+modell = smf.ols(formel, data = clean_data)
+resultat = modell.fit()
+print("Alle data:\n", resultat.summary())
+
+############################################
+
+# Plotter residualer og kvantil-kvantil-plot for clean_data. Dette må endres slik at det gjøres for
+# hver av de tre gruppene.
+
+figure, axis = plt.subplots(1, 2, figsize = (15, 5))
+sns.scatterplot(x = resultat.fittedvalues, y = resultat.resid, ax = axis[0])
+axis[0].set_ylabel("Residual")
+axis[0].set_xlabel("Predikert verdi")
+
+sm.qqplot(resultat.resid, line = '45', fit = True, ax = axis[1])
+axis[1].set_ylabel("Kvantiler i residualene")
+axis[1].set_xlabel("Kvantiler i normalfordelingen")
+plt.show()
