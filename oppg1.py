@@ -87,19 +87,19 @@ varemerke_data, ikke_varemerke_data, diverse_data = groupByTheme(clean_data)
 # Viser kryssplott med regresjonslinje for varemerke, ikke-varemerke og diverse data.
 # Printer også OLS-resultatet for hver av modellene.
 
+# Varemerke
 formel = 'Price ~ Pieces'
 
 modell = smf.ols(formel, data = varemerke_data)
 resultat = modell.fit()
+varemerke_resultat = resultat
 print("Varemerkedata:\n", resultat.summary())
 
 slope = resultat.params['Pieces']
 intercept = resultat.params['Intercept']
 
 regression_x = np.array(varemerke_data['Pieces'])
-
 regression_y = slope * regression_x + intercept
-
 plt.scatter(varemerke_data['Pieces'], varemerke_data['Price'], label='Data Points')
 plt.plot(regression_x, regression_y, color='red', label='Regression Line')
 plt.xlabel('Antall brikker')
@@ -109,9 +109,10 @@ plt.legend()
 plt.grid()
 plt.show()
 
-
+# Ikke-varemerke
 modell = smf.ols(formel, data = ikke_varemerke_data)
 resultat = modell.fit()
+ikke_varemerke_resultat = resultat
 print("Ikke-varemerkedata\n", resultat.summary())
 regression_x = np.array(ikke_varemerke_data['Pieces'])
 plt.scatter(ikke_varemerke_data['Pieces'], ikke_varemerke_data['Price'], label='Data Points')
@@ -123,8 +124,10 @@ plt.legend()
 plt.grid()
 plt.show()
 
+# Diverse
 modell = smf.ols(formel, data = diverse_data)
 resultat = modell.fit()
+diverse_resultat = resultat
 print("Diverse-data:\n", resultat.summary())
 resultat.summary()
 regression_x = np.array(diverse_data['Pieces'])
@@ -167,15 +170,41 @@ print("Alle data:\n", resultat.summary())
 
 ############################################
 
-# Plotter residualer og kvantil-kvantil-plot for clean_data. Dette må endres slik at det gjøres for
-# hver av de tre gruppene.
+# Plotter residualer og QQ-plott for varemerke_data, ikke_varemerke_data og
+# diverse_data.
 
+# Varemerke
 figure, axis = plt.subplots(1, 2, figsize = (15, 5))
-sns.scatterplot(x = resultat.fittedvalues, y = resultat.resid, ax = axis[0])
+sns.scatterplot(x = varemerke_resultat.fittedvalues, y = varemerke_resultat.resid, ax = axis[0])
 axis[0].set_ylabel("Residual")
 axis[0].set_xlabel("Predikert verdi")
 
-sm.qqplot(resultat.resid, line = '45', fit = True, ax = axis[1])
+sm.qqplot(varemerke_resultat.resid, line = '45', fit = True, ax = axis[1])
 axis[1].set_ylabel("Kvantiler i residualene")
 axis[1].set_xlabel("Kvantiler i normalfordelingen")
+plt.title("Varemerke")
+plt.show()
+
+# Ikke-varemerke
+figure, axis = plt.subplots(1, 2, figsize = (15, 5))
+sns.scatterplot(x = ikke_varemerke_resultat.fittedvalues, y = ikke_varemerke_resultat.resid, ax = axis[0])
+axis[0].set_ylabel("Residual")
+axis[0].set_xlabel("Predikert verdi")
+
+sm.qqplot(ikke_varemerke_resultat.resid, line = '45', fit = True, ax = axis[1])
+axis[1].set_ylabel("Kvantiler i residualene")
+axis[1].set_xlabel("Kvantiler i normalfordelingen")
+plt.title("Ikke-varemerke")
+plt.show()
+
+# Diverse
+figure, axis = plt.subplots(1, 2, figsize = (15, 5))
+sns.scatterplot(x = diverse_resultat.fittedvalues, y = diverse_resultat.resid, ax = axis[0])
+axis[0].set_ylabel("Residual")
+axis[0].set_xlabel("Predikert verdi")
+
+sm.qqplot(diverse_resultat.resid, line = '45', fit = True, ax = axis[1])
+axis[1].set_ylabel("Kvantiler i residualene")
+axis[1].set_xlabel("Kvantiler i normalfordelingen")
+plt.title("Diverse")
 plt.show()
