@@ -164,9 +164,26 @@ plt.legend()
 plt.grid()
 plt.show()
 
-modell = smf.ols(formel, data = clean_data)
-resultat = modell.fit()
-print("Alle data:\n", resultat.summary())
+
+# Concatenate the DataFrames and add a new column to indicate the category
+varemerke_data['Category'] = 'Varemerke'
+ikke_varemerke_data['Category'] = 'Ikke-varemerke'
+diverse_data['Category'] = 'Diverse'
+
+combined_data = pd.concat([diverse_data, varemerke_data, ikke_varemerke_data])
+
+# Convert Category to a categorical variable
+combined_data['Category'] = combined_data['Category'].astype('category')
+
+# Update the formula to include the new category column
+# Bruker C() for å indikere at Category er en kategorisk variabel og sammenligner mot Ikke-varemerke
+formula = 'Price ~ Pieces + C(Category, Treatment(reference="Ikke-varemerke"))'
+
+# Fit the model using the combined data
+model = smf.ols(formula, data=combined_data)
+result = model.fit()
+print("Combined data:\n", result.summary())
+
 
 ############################################
 
